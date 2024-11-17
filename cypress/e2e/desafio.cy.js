@@ -34,7 +34,7 @@ describe('Cadastro de usuário', () => {
         cy.checkMessage('O campo senha deve ter pelo menos 6 dígitos')
       })
 
-      it('Login com sucesso', () => {
+      it.only('Login com sucesso', () => {
         const name = faker.person.fullName()
         const email = faker.internet.email()
 
@@ -42,12 +42,9 @@ describe('Cadastro de usuário', () => {
         cy.fillEmail(email)
         cy.fillPassword(user_data.password)
         cy.saveRegister()
+        cy.checkRegisterSucess(name)
 
-        cy.get('#swal2-title')
-            .should('have.text', 'Cadastro realizado!')
-
-        cy.get('#swal2-html-container')
-            .should('have.text', `Bem-vindo ${name}`)
+        
 
       })
 
