@@ -2,103 +2,46 @@
 import { faker } from '@faker-js/faker';
 
 const user_data = require('../fixtures/data_valid.json')
-const user_datainv = require('../fixtures/data.invalid.json')
 
 describe('Cadastro de usuário', () => {
     beforeEach(() => {
-        cy.visit('/')
-            .get('.header-logo')
-
-        cy.get('.fa-lock').click()
-
+        cy.accessRegisterPage()
       });
-
       
-
       it('Validar campo nome vazio', () => {
-        cy.get('#user')
-
-        cy.get('#email')
-            .type(user_data.email)
-
-        cy.get('#password')
-            .type(user_data.password)
-
-        cy.get('#btnRegister')
-            .click()
-
-        cy.get('#errorMessageFirstName')
-        cy.log('Campo vazio preencha-o')
-
+        cy.saveRegister()
+        cy.checkMessage('O campo nome deve ser prenchido')
       })
 
       it('Validar campo email vazio', () => {
-        cy.get('#user')
-            .type(user_data.name)
-            
-        cy.get('#email')
-
-        cy.get('#password')
-            .type(user_data.name)
-
-        cy.get('#btnRegister')
-            .click()
-            
-        cy.get('#errorMessageFirstName')
-        cy.log('Campo vazio preencha-o')
+        cy.fillName(user_data.name)
+        cy.saveRegister()
+        cy.checkMessage('O campo e-mail deve ser prenchido corretamente')
       })
 
       it('Validar campo email inválido', () => {
-        cy.get('#user')
-            .type(user_data.name)
-
-        cy.get('#email')
-            .type(user_datainv.email)
-            
-        cy.get('#password')
-            .type(user_data.password)
-
-        cy.get('#btnRegister')
-            .click()
-
-        cy.get('#errorMessageFirstName')
-        cy.log('Email invalido, preencha-o')
-        
+        cy.fillName(user_data.name)
+        cy.fillEmail('emailinvalido')
+        cy.saveRegister()
+        cy.checkMessage('O campo e-mail deve ser prenchido corretamente')
       })
 
-      it('Campo Senha invalida', () => {
-        cy.get('#user')
-            .type(user_data.name)
-            
-        cy.get('#email')
-            .type(user_data.email)
-        cy.get('#password')
-            .type('A123@')
-
-        cy.get('#btnRegister')
-            .click()
-
-        cy.get('#errorMessageFirstName')
-        cy.log('Campo Senha 6 caracteres no minimo.')
-
+      it('Campo Senha invalido ', () => {
+        cy.fillName(user_data.name)
+        cy.fillEmail(user_data.email)
+        cy.fillPassword('A123@')
+        cy.saveRegister()
+        cy.checkMessage('O campo senha deve ter pelo menos 6 dígitos')
       })
 
-      it.only('Login com sucesso', () => {
-
+      it('Login com sucesso', () => {
         const name = faker.person.fullName()
         const email = faker.internet.email()
 
-        cy.get('#user')
-            .type(name)
-
-        cy.get('#email')
-            .type(email)
-
-        cy.get('#password')
-            .type(user_data.password)
-
-        cy.get('#btnRegister')
-            .click()
+        cy.fillName(name)
+        cy.fillEmail(email)
+        cy.fillPassword(user_data.password)
+        cy.saveRegister()
 
         cy.get('#swal2-title')
             .should('have.text', 'Cadastro realizado!')
