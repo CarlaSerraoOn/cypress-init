@@ -16,8 +16,14 @@
 /// <reference types="cypress" />
 
 Cypress.Commands.add('accessRegisterPage', () => {
+    // acesso a aplicação
     cy.visit('/')
             .get('.header-logo')
 
-        cy.get('.fa-lock').click()
-})
+    // entrou no registro
+    cy.get('.fa-lock').click()
+
+    // verificar se a página está de cadastro
+    cy.get('#user')
+        .should('be.visible')
+    })

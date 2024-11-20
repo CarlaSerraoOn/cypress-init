@@ -1,48 +1,52 @@
 /// <reference types="cypress" />
+
 import { faker } from '@faker-js/faker';
+import home_page from '../support/pages/home_page';
+import register_page from '../support/pages/register_page';
 
 const user_data = require('../fixtures/data_valid.json')
 
 describe('Cadastro de usuário', () => {
+
     beforeEach(() => {
-        cy.accessRegisterPage()
+       home_page.accessRegisterPage()
       });
       
-      it('Validar campo nome vazio', () => {
-        cy.saveRegister()
-        cy.checkMessage('O campo nome deve ser prenchido')
+      it.only('Validar campo nome vazio', () => {
+        register_page.saveRegister()
+        register_page.checkMessage('O campo nome deve ser prenchido')
       })
 
-      it('Validar campo email vazio', () => {
-        cy.fillName(user_data.name)
-        cy.saveRegister()
-        cy.checkMessage('O campo e-mail deve ser prenchido corretamente')
+      it.only('Validar campo email vazio', () => {
+        register_page.fillName(user_data.name)
+        register_page.saveRegister()
+        register_page.checkMessage('O campo e-mail deve ser prenchido corretamente')
       })
 
-      it('Validar campo email inválido', () => {
-        cy.fillName(user_data.name)
-        cy.fillEmail('emailinvalido')
-        cy.saveRegister()
-        cy.checkMessage('O campo e-mail deve ser prenchido corretamente')
+      it.only('Validar campo email inválido', () => {
+        register_page.fillName(user_data.name)
+        register_page.fillEmail('emailinvalido')
+        register_page.saveRegister()
+        register_page.checkMessage('O campo e-mail deve ser prenchido corretamente')
       })
 
-      it('Campo Senha invalido ', () => {
-        cy.fillName(user_data.name)
-        cy.fillEmail(user_data.email)
-        cy.fillPassword('A123@')
-        cy.saveRegister()
-        cy.checkMessage('O campo senha deve ter pelo menos 6 dígitos')
+      it.only('Campo Senha invalido ', () => {
+        register_page.fillName(user_data.name)
+        register_page.fillEmail(user_data.email)
+        register_page.fillPassword('A123@')
+        register_page.saveRegister()
+        register_page.checkMessage('O campo senha deve ter pelo menos 6 dígitos')
       })
 
       it.only('Login com sucesso', () => {
         const name = faker.person.fullName()
         const email = faker.internet.email()
 
-        cy.fillName(name)
-        cy.fillEmail(email)
-        cy.fillPassword(user_data.password)
-        cy.saveRegister()
-        cy.checkRegisterSucess(name)
+        register_page.fillName(name)
+        register_page.fillEmail(email)
+        register_page.fillPassword(user_data.password)
+        register_page.saveRegister()
+        register_page.checkRegisterSucess(name)
 
         
 
